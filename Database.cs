@@ -57,9 +57,24 @@ namespace PandeBot
 
     public class Listas
     {
+        public Listas()
+        {
+            LastResults = new Dictionary<string, Queue<int>>();
+            LastResults.Add("apodos", new Queue<int>());
+            LastResults.Add("frases", new Queue<int>());
+            LastResults.Add("audios", new Queue<int>());
+            LastResults.Add("videos", new Queue<int>());
+            LastResults.Add("photos", new Queue<int>());
+        }
+        public Dictionary<string, Queue<int>> LastResults { get; set; }
         public List<string> apodos { get; set; }
+
         public List<string> frases { get; set; }
+
         public List<string> audios { get; set; }
+
+        public List<string> videos { get; set; }
+
         public List<string> photos { get; set; }
 
     }

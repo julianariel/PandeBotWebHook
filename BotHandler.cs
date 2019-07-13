@@ -33,7 +33,7 @@ namespace PandeBot
             var message = update.Message;
 
             _log.LogInformation($"Recibió un mensaje de {message.From.FirstName} {message.From.LastName} - {message.From.Id}");
-            if (message == null || (message.Type != MessageType.Text && message.Type != MessageType.Audio && message.Type != MessageType.Photo)) return;
+            if (message == null || (message.Type != MessageType.Text && message.Type != MessageType.Audio && message.Type != MessageType.Photo && message.Type != MessageType.Video)) return;
 
             switch (message.Type)
             {
@@ -45,6 +45,9 @@ namespace PandeBot
                     break;
                 case MessageType.Photo:
                     await HandlePhotoMessage(message);
+                    break;
+                case MessageType.Video:
+                    await HandleVideoMessage(message);
                     break;
             }
 
@@ -84,6 +87,24 @@ namespace PandeBot
                 await botClient.SendTextMessageAsync(
                     chatId: chat,
                     text: $"Tu audio se agregó a la DB! {char.ConvertFromUtf32(0x1F389)} "
+                );
+
+                database.SaveDB();
+            }
+
+        }
+
+        async Task HandleVideoMessage(Message message)
+        {
+            Chat chat = message.Chat;
+
+            if (!database.Listas.videos.Exists(a => a.Equals(message.Video.FileId)))
+            {
+                database.Listas.videos.Add(message.Video.FileId);
+
+                await botClient.SendTextMessageAsync(
+                    chatId: chat,
+                    text: $"Tu video se agregó a la DB! {char.ConvertFromUtf32(0x1F389)} "
                 );
 
                 database.SaveDB();
@@ -155,14 +176,14 @@ namespace PandeBot
 
                         await botClient.SendTextMessageAsync(
                           chatId: chat,
-                          text: database.Listas.apodos.RandomElement()
+                          text: database.Listas.apodos.RandomElement(database.Listas.LastResults["apodos"])
                         );
                         break;
 
                     case "/lopa":
                         await botClient.SendTextMessageAsync(
                           chatId: chat,
-                          text: database.Listas.frases.RandomElement()
+                          text: database.Listas.frases.RandomElement(database.Listas.LastResults["frases"])
                         );
                         break;
 
@@ -179,7 +200,7 @@ namespace PandeBot
 
                         await botClient.SendAudioAsync(
                             chatId: chat,
-                            audio: database.Listas.audios.RandomElement()
+                            audio: database.Listas.audios.RandomElement(database.Listas.LastResults["audios"])
                             );
                         break;
                     case "/foto":
@@ -194,8 +215,25 @@ namespace PandeBot
                         }
                         await botClient.SendPhotoAsync(
                           chatId: chat,
-                          photo: database.Listas.photos.RandomElement()
+                          photo: database.Listas.photos.RandomElement(database.Listas.LastResults["photos"])
                         );
+                        break;
+                    case "/video":
+                        if (database.Listas.photos.Count() == 0)
+                        {
+                            await botClient.SendTextMessageAsync(
+                                chatId: chat,
+                                text: $"No hay video cargadas :(. Te dejo un train simulator {char.ConvertFromUtf32(0x1F689)}"
+                            );
+
+                            return;
+                        }
+
+                        await botClient.SendVideoAsync(
+                          chatId: chat,
+                          video: database.Listas.audios.RandomElement(database.Listas.LastResults["videos"])
+                        );
+
                         break;
                 }
 
