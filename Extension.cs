@@ -10,7 +10,7 @@ namespace PandeBot
         public static T RandomElement<T>(this IList<T> list, Queue<int> lastResults)
         {
             int result;
-            int maxCount = (list.Count < 5) ? list.Count : 5;
+            int maxCount = (list.Count < 10) ? list.Count : 10;
 
             do {
                 result = rng.Next(list.Count);   

@@ -225,15 +225,21 @@ namespace PandeBot
                                 chatId: chat,
                                 text: $"No hay videos cargados :(. Te dejo un train simulator {char.ConvertFromUtf32(0x1F689)}"
                             );
-
+                            
                             return;
                         }
 
                         await botClient.SendVideoAsync(
                           chatId: chat,
                           video: database.Listas.videos.RandomElement(database.Listas.LastResults["videos"])
-                        );
+                        );                        
 
+                        break;
+                    case "/juego":
+                        await botClient.SendGameAsync(
+                            chatId: chat,
+                            gameShortName: "Space Traveler"
+                        );
                         break;
                 }
 
