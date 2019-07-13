@@ -223,7 +223,7 @@ namespace PandeBot
                         {
                             await botClient.SendTextMessageAsync(
                                 chatId: chat,
-                                text: $"No hay video cargadas :(. Te dejo un train simulator {char.ConvertFromUtf32(0x1F689)}"
+                                text: $"No hay videos cargados :(. Te dejo un train simulator {char.ConvertFromUtf32(0x1F689)}"
                             );
 
                             return;

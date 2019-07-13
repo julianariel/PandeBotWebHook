@@ -10,14 +10,16 @@ namespace PandeBot
         public static T RandomElement<T>(this IList<T> list, Queue<int> lastResults)
         {
             int result;
+            int maxCount = (list.Count < 5) ? list.Count : 5;
+
             do {
                 result = rng.Next(list.Count);   
             }         
-            while (lastResults.Contains(result));
+            while (lastResults.Contains(result) && list.Count > 1);
 
             lastResults.Enqueue(result);
 
-            if (lastResults.Count > 5)
+            if (lastResults.Count >= maxCount)
                 lastResults.Dequeue();
 
             return list[result];
