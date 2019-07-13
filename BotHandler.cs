@@ -219,7 +219,7 @@ namespace PandeBot
                         );
                         break;
                     case "/video":
-                        if (database.Listas.photos.Count() == 0)
+                        if (database.Listas.videos.Count() == 0)
                         {
                             await botClient.SendTextMessageAsync(
                                 chatId: chat,
