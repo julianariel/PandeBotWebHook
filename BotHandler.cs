@@ -231,7 +231,7 @@ namespace PandeBot
 
                         await botClient.SendVideoAsync(
                           chatId: chat,
-                          video: database.Listas.audios.RandomElement(database.Listas.LastResults["videos"])
+                          video: database.Listas.videos.RandomElement(database.Listas.LastResults["videos"])
                         );
 
                         break;
